@@ -1,0 +1,31 @@
+import { Callout } from 'nextra/components'
+
+# __Loop__
+Looping is a feature that allows you to loop the current track or the whole queue.
+
+### __Queue Loop__
+To loop the whole queue, you can use the `setLoop` method with the `queue` option.
+```js copy
+player.setLoop("queue")
+```
+
+### __Track Loop__
+To loop the current track, you can use the `setLoop` method with the `track` option.
+```js copy
+player.setLoop("track")
+```
+
+### __Disable Loop__
+To disable loop, you can use the `setLoop` method with the `none` option.
+```js copy
+player.setLoop("none")
+```
+
+### __Get__
+<Callout emoji="💡">
+  You can use the `loop` method to toggle between the loop options.
+</Callout>
+
+```js copy
+console.log(player.loop) // "none"
+```

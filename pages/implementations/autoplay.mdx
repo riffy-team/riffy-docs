@@ -1,0 +1,36 @@
+import { Callout } from 'nextra/components'
+
+# __Autoplay__
+
+Autoplay is a feature that allows you to automatically play songs related to the one you are currently listening to.
+
+<Callout type="info">
+We are the first to have autoplay for Spotify, SoundCloud, and, as usual, YouTube. and we are adding support for other platforms.
+</Callout>
+
+# __How to use__
+
+To use this feature, you don't need to enable or disable anything, just put this in your **queueEnd** event and you're done. (already implemented in the example.)
+
+```js copy showLineNumbers {7}
+client.riffy.on("queueEnd", async (player) => {
+    const channel = client.channels.cache.get(player.textChannel);
+    
+	const autoplay = false;
+
+    if (autoplay) {
+        player.autoplay(player)
+    } else {
+        player.destroy();
+        channel.send("Queue has ended.");
+    }
+})
+```
+
+# __How it works__
+
+The autoplay feature works by searching for songs related to the one you are currently listening to, and then adding them to the queue.
+
+<Callout type="info">
+The autoplay feature is not perfect, so it may not always work as expected.
+</Callout>

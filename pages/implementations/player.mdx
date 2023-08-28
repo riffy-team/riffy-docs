@@ -1,0 +1,113 @@
+import { Callout, Cards, Card } from 'nextra/components'
+import { ArrowRightIcon } from 'nextra/icons'
+
+# __Player__
+Represents a player in a Guild.
+## __Properties__
+- `connected`
+- `connection`
+- `current`
+- `data`
+- `deaf`
+- `filters`
+- `loop`
+- `mute`
+- `node`
+- `riffy`
+- `options`
+- `paused`
+- `ping`
+- `playing`
+- `position`
+- `queue`
+- `textChannel`
+- `timestamp`
+- `value`
+- `voiceChannel`
+- `volume`
+___
+## __Methods__
+### __.play()__
+> Players starts playing the song from queue.
+> 
+> Returns ```Promise<void>```
+___
+### __.autoplay(Player)__
+> Player auto-plays the song after the queue ends. 
+> 
+> Returns ```Promise<Player>```
+
+<Cards>
+  <Card icon={<ArrowRightIcon />} title="Autoplay" href="/implementations/autoplay" />
+</Cards>
+___
+### __.connect(options)__
+> Player make the bot to join the voiceChannel
+> 
+> Returns: ```void```
+
+Example:
+```js copy
+await Player.connect({guildId: "9347623649232434", voiceChannel: "3874928743294712", deaf: true, mute: false})
+.catch(e => console.log("Missing permission to Join the voice channel"));
+```
+____
+### __.stop()__
+> Player stops playing current song and jumps to next one in the queue.
+> 
+> Returns: ```void```
+____
+### __.pause(Boolean)__
+> Pause and resumes the player
+> 
+> Returns: ```Player```
+___
+### __.seek(Number)__
+> Seek to a certain part of the song
+> 
+> Returns: ```void```
+___
+### __.setVolume(Number)__
+> Change volume of the player
+> 
+> Returns: ```Player```
+
+Example: 
+```js copy
+Player.setVolume(70);
+```
+___
+### __.setLoop(options)__
+> Update loop settings of Player
+> 
+> Returns: ```Player```
+
+<Cards>
+  <Card icon={<ArrowRightIcon />} title="Loop" href="/implementations/loop" />
+</Cards>
+___
+### __.setTextChannel(Id)__
+> Update Text Channel of the player
+> 
+> Returns: ```Player```
+___
+### __.setVoiceChannel(id, options)__
+> Update VoiceChannel of player
+> 
+> Returns: ```Player```
+
+Example
+```js copy
+Player.setVoiceChannel("340304284928342303", {deaf: true, mute: false});
+```
+___
+### __.disconnect()__
+> Disconnect the player
+> 
+> Returns: ```Player```
+___
+### __.destroy()__
+> Destroy the player
+>
+> Returns: ```void```
+___

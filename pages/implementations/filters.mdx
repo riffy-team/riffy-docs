@@ -1,0 +1,186 @@
+import { Callout } from 'nextra/components'
+
+# __Filters__
+
+Filters are used to filter the songs based on the user's choice. The filters are as follows:
+
+### __.setKaraoke__
+
+This filter is used to set the karaoke mode. The karaoke mode is used to remove the vocals from the song.
+
+```js copy
+// set default karaoke mode
+player.filters.setKaraoke()
+
+// or you can adjust it by passing an object
+player.filters.setKaraoke({
+    level: 1,
+    monoLevel: 1,
+    filterBand: 1,
+    filterWidth: 1
+})
+```
+
+### __.setTimescale__
+
+This filter is used to change the speed of the song.
+
+```js copy
+// set default timescale
+player.filters.setTimescale()
+
+// or you can adjust it by passing an object
+player.filters.setTimescale({
+    speed: 1,
+    pitch: 1,
+    rate: 1
+})
+```
+
+### __.setTremolo__
+
+This filter is used to add tremolo effect to the song.
+
+```js copy
+// set default tremolo effect
+player.filters.setTremolo()
+
+// or you can adjust it by passing an object
+player.filters.setTremolo({
+    frequency: 1,
+    depth: 1
+})
+```
+
+### __.setVibrato__
+
+This filter is used to add vibrato effect to the song.
+
+```js copy
+// set default vibrato effect
+player.filters.setVibrato()
+
+// or you can adjust it by passing an object
+player.filters.setVibrato({
+    frequency: 1,
+    depth: 1
+})
+```
+
+### __.setRotation__
+
+This filter is used to add rotation effect to the song.
+
+```js copy
+// set default rotation effect
+player.filters.setRotation()
+
+// or you can adjust it by passing an object
+player.filters.setRotation({
+    rotationHz: 1
+})
+```
+
+### __.setDistortion__
+
+This filter is used to add distortion effect to the song.
+
+```js copy
+// set default distortion effect
+player.filters.setDistortion()
+
+// or you can adjust it by passing an object
+player.filters.setDistortion({
+    sinOffset: 1,
+    sinScale: 1,
+    cosOffset: 1,
+    cosScale: 1,
+    tanOffset: 1,
+    tanScale: 1,
+    offset: 1,
+    scale: 1
+})
+```
+
+### __.setChannelMix__
+
+This filter is used to mix the channels of the song.
+
+```js copy
+// set default channel mix
+player.filters.setChannelMix()
+
+// or you can adjust it by passing an object
+player.filters.setChannelMix({
+    leftToLeft: 1,
+    leftToRight: 1,
+    rightToLeft: 1,
+    rightToRight: 1
+})
+```
+
+### __.setLowPass__
+
+This filter is used to add low pass effect to the song.
+
+```js copy
+// set default low pass effect
+player.filters.setLowPass()
+
+// or you can adjust it by passing an object
+player.filters.setLowPass({
+    smoothing: 1
+})
+```
+
+### __.setBassboost__
+
+This filter is used to add bassboost effect to the song.
+
+```js copy
+player.filters.setBassboost(1)
+```
+
+<Callout type="info">
+The value of the bassboost can be between 1 and 5.
+</Callout>
+
+### __.setSlowmode__
+
+This filter is used to add slowmode effect to the song.
+
+```js copy
+player.filters.setSlowmode()
+```
+
+### __.setNightcore__
+
+This filter is used to add nightcore effect to the song.
+
+```js copy
+player.filters.setNightcore()
+```
+
+### __.setVaporwave__
+
+This filter is used to add vaporwave effect to the song.
+
+```js copy
+player.filters.setVaporwave()
+```
+
+### __.set8D__
+
+This filter is used to add 8D effect to the song.
+
+```js copy
+player.filters.set8D()
+```
+
+# __Clear Filters__
+
+Clears all the filters applied to the song.
+
+```js copy
+player.filters.clearFilters()
+```

@@ -1,0 +1,95 @@
+import { Callout } from 'nextra/components'
+
+# __Events__
+
+### nodeConnect
+- `nodeConnect` is emitted when a new node is connected to the network.
+- `nodeConnect` is emitted with the following parameters:
+  - `node` - the node that was connected to the network.
+
+### nodeDisconnect
+- `nodeDisconnect` is emitted when a node is disconnected from the network.
+- `nodeDisconnect` is emitted with the following parameters:
+  - `node` - the node that was disconnected from the network.
+  - `reason` - the reason the node was disconnected from the network.
+
+### nodeReconnect
+- `nodeReconnect` is emitted when a node is reconnected to the network.
+- `nodeReconnect` is emitted with the following parameters:
+  - `node` - the node that was reconnected to the network.
+
+### nodeError
+- `nodeError` is emitted when a node encounters an error.
+- `nodeError` is emitted with the following parameters:
+  - `node` - the node that encountered the error.
+  - `error` - the error that was encountered.
+
+### trackStart
+- `trackStart` is emitted when a track starts playing.
+- `trackStart` is emitted with the following parameters:
+  - `player` - the player that started playing the track.
+  - `track` - the track that started playing.
+  - `payload` - the payload that was sent with the track.
+
+### trackEnd
+- `trackEnd` is emitted when a track ends.
+- `trackEnd` is emitted with the following parameters:
+  - `player` - the player that ended the track.
+  - `track` - the track that ended.
+  - `payload` - the payload that was sent with the track.
+
+### trackError
+- `trackError` is emitted when a track encounters an error.
+- `trackError` is emitted with the following parameters:
+  - `player` - the player that encountered the error.
+  - `track` - the track that encountered the error.
+  - `payload` - the payload that was sent with the track.
+
+### trackStuck
+- `trackStuck` is emitted when a track gets stuck.
+- `trackStuck` is emitted with the following parameters:
+  - `player` - the player that got stuck.
+  - `track` - the track that got stuck.
+  - `payload` - the payload that was sent with the track.
+
+### socketClosed
+- `socketClosed` is emitted when a socket is closed.
+- `socketClosed` is emitted with the following parameters:
+  - `player` - the player that closed the socket.
+  - `payload` - the payload that was sent with the socket.
+
+### playerCreate
+- `playerCreate` is emitted when a player is created.
+- `playerCreate` is emitted with the following parameters:
+  - `player` - the player that was created.
+
+### playerDestroy
+- `playerDestroy` is emitted when a player is destroyed.
+- `playerDestroy` is emitted with the following parameters:
+  - `player` - the player that was destroyed.
+
+### playerMove
+- `playerMove` is emitted when a player is moved to a new node.
+- `playerMove` is emitted with the following parameters:
+  - `player` - the player that was moved.
+  - `oldChannel` - the node the player was moved from.
+  - `newChannel` - the node the player was moved to.
+
+### playerUpdate
+- `playerUpdate` is emitted when a player is updated.
+- `playerUpdate` is emitted with the following parameters:
+  - `player` - the player that was updated.
+  - `payload` - the payload that was sent with the update.
+
+### queueEnd
+- `queueEnd` is emitted when a queue ends.
+- `queueEnd` is emitted with the following parameters:
+  - `player` - the player that ended the queue.
+
+### debug
+<Callout type="info">
+Debug events are used for debugging purposes and should not be used in production.
+</Callout>
+- `debug` is emitted when a debug message is received.
+- `debug` is emitted with the following parameters:
+  - `message` - the debug message that was received.
