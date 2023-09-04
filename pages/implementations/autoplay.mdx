@@ -15,10 +15,8 @@ To use this feature, you don't need to enable or disable anything, just put this
 ```js copy showLineNumbers {7}
 client.riffy.on("queueEnd", async (player) => {
     const channel = client.channels.cache.get(player.textChannel);
-    
-	const autoplay = false;
 
-    if (autoplay) {
+    if (player.isAutoplay) {
         player.autoplay(player)
     } else {
         player.destroy();
