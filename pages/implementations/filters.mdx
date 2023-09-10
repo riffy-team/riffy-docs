@@ -10,15 +10,18 @@ This filter is used to set the karaoke mode. The karaoke mode is used to remove 
 
 ```js copy
 // set default karaoke mode
-player.filters.setKaraoke()
+player.filters.setKaraoke(true)
 
 // or you can adjust it by passing an object
-player.filters.setKaraoke({
+player.filters.setKaraoke(true, {
     level: 1,
     monoLevel: 1,
     filterBand: 1,
     filterWidth: 1
 })
+
+// to disable
+player.filters.setKaraoke(false)
 ```
 
 ### __.setTimescale__
@@ -27,14 +30,17 @@ This filter is used to change the speed of the song.
 
 ```js copy
 // set default timescale
-player.filters.setTimescale()
+player.filters.setTimescale(true)
 
 // or you can adjust it by passing an object
-player.filters.setTimescale({
+player.filters.setTimescale(true, {
     speed: 1,
     pitch: 1,
     rate: 1
 })
+
+// to disable
+player.filters.setTimescale(false)
 ```
 
 ### __.setTremolo__
@@ -43,13 +49,16 @@ This filter is used to add tremolo effect to the song.
 
 ```js copy
 // set default tremolo effect
-player.filters.setTremolo()
+player.filters.setTremolo(true)
 
 // or you can adjust it by passing an object
-player.filters.setTremolo({
+player.filters.setTremolo(true, {
     frequency: 1,
     depth: 1
 })
+
+// to disable
+player.filters.setTremolo(false)
 ```
 
 ### __.setVibrato__
@@ -58,13 +67,16 @@ This filter is used to add vibrato effect to the song.
 
 ```js copy
 // set default vibrato effect
-player.filters.setVibrato()
+player.filters.setVibrato(true)
 
 // or you can adjust it by passing an object
-player.filters.setVibrato({
+player.filters.setVibrato(true, {
     frequency: 1,
     depth: 1
 })
+
+// to disable
+player.filters.setVibrato(false)
 ```
 
 ### __.setRotation__
@@ -73,12 +85,15 @@ This filter is used to add rotation effect to the song.
 
 ```js copy
 // set default rotation effect
-player.filters.setRotation()
+player.filters.setRotation(true)
 
 // or you can adjust it by passing an object
-player.filters.setRotation({
+player.filters.setRotation(true, {
     rotationHz: 1
 })
+
+// to disable
+player.filters.setRotation(false)
 ```
 
 ### __.setDistortion__
@@ -87,10 +102,10 @@ This filter is used to add distortion effect to the song.
 
 ```js copy
 // set default distortion effect
-player.filters.setDistortion()
+player.filters.setDistortion(true)
 
 // or you can adjust it by passing an object
-player.filters.setDistortion({
+player.filters.setDistortion(true, {
     sinOffset: 1,
     sinScale: 1,
     cosOffset: 1,
@@ -100,6 +115,9 @@ player.filters.setDistortion({
     offset: 1,
     scale: 1
 })
+
+// to disable
+player.filters.setDistortion(false)
 ```
 
 ### __.setChannelMix__
@@ -108,15 +126,18 @@ This filter is used to mix the channels of the song.
 
 ```js copy
 // set default channel mix
-player.filters.setChannelMix()
+player.filters.setChannelMix(true)
 
 // or you can adjust it by passing an object
-player.filters.setChannelMix({
+player.filters.setChannelMix(true, {
     leftToLeft: 1,
     leftToRight: 1,
     rightToLeft: 1,
     rightToRight: 1
 })
+
+// to disable
+player.filters.setChannelMix(false)
 ```
 
 ### __.setLowPass__
@@ -125,12 +146,15 @@ This filter is used to add low pass effect to the song.
 
 ```js copy
 // set default low pass effect
-player.filters.setLowPass()
+player.filters.setLowPass(true)
 
 // or you can adjust it by passing an object
-player.filters.setLowPass({
+player.filters.setLowPass(true, {
     smoothing: 1
 })
+
+// to disable
+player.filters.setLowPass(false)
 ```
 
 ### __.setBassboost__
@@ -138,7 +162,16 @@ player.filters.setLowPass({
 This filter is used to add bassboost effect to the song.
 
 ```js copy
-player.filters.setBassboost(1)
+// set default low pass effect
+player.filters.setBassboost(true)
+
+// or you can adjust it by passing an object
+player.filters.setBassboost(true, {
+    value: 1
+})
+
+// to disable
+player.filters.setBassboost(false)
 ```
 
 <Callout type="info">
@@ -150,10 +183,15 @@ The value of the bassboost can be between 1 and 5.
 This filter is used to add slowmode effect to the song.
 
 ```js copy
-// To enable
+// set default low pass effect
 player.filters.setSlowmode(true); 
 
-// To disable
+// or you can adjust it by passing an object
+player.filters.setSlowmode(true, {
+    rate: 0.8
+});
+
+// to disable
 player.filters.setSlowmode(false); 
 ```
 
@@ -162,10 +200,15 @@ player.filters.setSlowmode(false);
 This filter is used to add nightcore effect to the song.
 
 ```js copy
-// To enable
+// set default low pass effect
 player.filters.setNightcore(true); 
 
-// To disable
+// or you can adjust it by passing an object
+player.filters.setNightcore(true, {
+    rate: 1.5
+});
+
+// to disable
 player.filters.setNightcore(false); 
 ```
 
@@ -174,10 +217,15 @@ player.filters.setNightcore(false);
 This filter is used to add vaporwave effect to the song.
 
 ```js copy
-// To enable
+// set default low pass effect
 player.filters.setVaporwave(true); 
 
-// To disable
+// or you can adjust it by passing an object
+player.filters.setVaporwave(true, {
+    pitch: 0.5
+}); 
+
+// to disable
 player.filters.setVaporwave(false); 
 ```
 
@@ -186,10 +234,15 @@ player.filters.setVaporwave(false);
 This filter is used to add 8D effect to the song.
 
 ```js copy
-// To enable
+// set default low pass effect
 player.filters.set8D(true); 
 
-// To enable
+// or you can adjust it by passing an object
+player.filters.set8D(true, {
+    rotationHz: 0.2
+});
+
+// to disable
 player.filters.set8D(false); 
 ```
 
