@@ -1,0 +1,50 @@
+import { Callout, Cards, Card } from 'nextra/components'
+import { ArrowRightIcon  } from 'nextra/icons'
+import Link from 'next/link'
+
+import TypeLink from "components/TypeLink.jsx"
+
+export const CodeBlock = (code) => {
+    return (
+        <code>{code}</code>
+    )
+}
+
+# __Queue\<T>__
+Represents the structure of the [Player's](/implementations/player) Queue.
+>
+> **extends** {CodeBlock(<TypeLink href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" label="Array<T>"/>)}
+
+## __Methods__
+### __.size__
+> Size of Queue
+>
+> Returns {CodeBlock(<TypeLink href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" label="number"/>)}
+
+### __.first__
+> returns first track of the Queue **Or** null (if Queue is empty)
+>
+> Returns ```Track | T | null```
+___
+
+### __.add(track)__
+> adds the provided to Queue
+>
+> Returns ```Queue```
+___
+
+### __.remove(index)__
+> removes the track on provided index & returns the Removed Track
+>
+> Returns ```Track```
+___
+
+### __.clear()__
+> clears(removes all the tracks) the queue
+>
+> Returns {CodeBlock(<TypeLink href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void" label="void"/>)}
+
+### __.shuffle()__
+> shuffles the Queue
+>
+> Returns {CodeBlock(<TypeLink href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void" label="void"/>)}
