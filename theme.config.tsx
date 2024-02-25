@@ -33,7 +33,7 @@ export default {
 
     return (
       <div>
-        <Head children={''}>
+        <Head>
           <title>{title}</title>
           <meta name="og:image" content={frontMatter.image} />
         </Head>
