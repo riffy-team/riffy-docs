@@ -35,6 +35,7 @@ export default {
       <div>
         <Head>
           <title>{title}</title>
+          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
           <meta name="og:image" content={frontMatter.image} />
         </Head>
         <h1>My Theme</h1>
