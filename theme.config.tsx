@@ -11,7 +11,7 @@ export default {
   },
   logo: (
     <>
-      <img src="https://media.discordapp.net/attachments/1144850950180323351/1144874841061728356/logo.png?width=393&height=393" alt="logo" width="30" height="30" />
+      <img src="https://avatars.githubusercontent.com/u/141020173?s=400&v=4" alt="logo" width="30" height="30" />
       <span style={{ marginLeft: '.4em', fontWeight: 800 }}>
         Riffy
       </span>
