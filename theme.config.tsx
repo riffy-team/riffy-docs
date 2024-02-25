@@ -11,7 +11,7 @@ export default {
   },
   logo: (
     <>
-      <img src="https://avatars.githubusercontent.com/u/141020173?s=400&v=4" alt="logo" width="30" height="30" />
+      <img src="/logo.svg" alt="logo" width="20" height="20" />
       <span style={{ marginLeft: '.4em', fontWeight: 800 }}>
         Riffy
       </span>
@@ -22,7 +22,7 @@ export default {
       <span>
         MIT {new Date().getFullYear()} ©{' '}
         <a href="" target="_blank">
-          A3PIRE
+          Riffy
         </a>
         .
       </span>
@@ -33,7 +33,7 @@ export default {
 
     return (
       <div>
-        <Head>
+        <Head children={''}>
           <title>{title}</title>
           <meta name="og:image" content={frontMatter.image} />
         </Head>
@@ -41,7 +41,7 @@ export default {
         Table of Contents:
         <ul>
           {headings.map(heading => (
-            <li key={heading.value}>{heading.value}</li>
+            <li key={heading.id}>{heading.value}</li>
           ))}
         </ul>
         <div style={{ border: '1px solid' }}>{children}</div>
