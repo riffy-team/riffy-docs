@@ -7,6 +7,14 @@ export default {
   color: {
     hue: 50,
   },
+  banner: {
+    key: 'LL-v3-deprecation-banner',
+    text: (
+      <a href="https://github.com/lavalink-devs/Lavalink/discussions/1100" target="_blank">
+        ⚠️ Friendly Reminder, Lavalink(By Lavalink Team) V3 Deprecates by 1st Nov-24', Be Ready! Read more →
+      </a>
+    )
+  },
   logo: (
     <>
       <img src="/logo.svg" alt="logo" width="20" height="20" />
