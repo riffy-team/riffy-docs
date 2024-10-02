@@ -1,13 +1,11 @@
 import React from 'react'
-import Head from 'next/head'
-import type { NextraThemeLayoutProps } from 'nextra'
+import { useRouter } from "nextra/hooks"
+import { useConfig } from 'nextra-theme-docs';
 
 export default {
-  primaryHue: 50,
-  useNextSeoProps() {
-    return {
-      titleTemplate: '%s – Riffy'
-    }
+  docsRepositoryBase: "https://github.com/riffy-team/riffy-docs/tree/main",
+  color: {
+    hue: 50,
   },
   logo: (
     <>
@@ -17,8 +15,30 @@ export default {
       </span>
     </>
   ),
+  head() {
+    const { asPath } = useRouter();
+    const { title } = useConfig()
+    const { frontMatter } = useConfig()
+
+    const url = `https://riffy.js.org${asPath}`
+    const metaDescription = frontMatter.description || 'Riffy is a pro lavalink client. Designed to be simple and easy to use, with a focus on stability and more features.'
+    const metaTitle = `${title} - Riffy`
+
+    return (
+      <>
+        <title>{metaTitle}</title>
+        <meta property="og:url" content={url} />
+        <meta property="og:title" content={metaTitle} />
+        <meta
+          property="og:description"
+          content={metaDescription}
+        />
+      </>
+    )
+
+  },
   footer: {
-    text: (
+    content: (
       <span>
         MIT {new Date().getFullYear()} ©{' '}
         <a href="" target="_blank">
@@ -26,27 +46,6 @@ export default {
         </a>
         .
       </span>
-    )
-  },
-  Layout({ children, pageOpts }: NextraThemeLayoutProps) {
-    const { title, frontMatter, headings } = pageOpts
-
-    return (
-      <div>
-        <Head>
-          <title>{title}</title>
-          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-          <meta name="og:image" content={frontMatter.image} />
-        </Head>
-        <h1>My Theme</h1>
-        Table of Contents:
-        <ul>
-          {headings.map(heading => (
-            <li key={heading.id}>{heading.value}</li>
-          ))}
-        </ul>
-        <div style={{ border: '1px solid' }}>{children}</div>
-      </div>
     )
   }
 }
