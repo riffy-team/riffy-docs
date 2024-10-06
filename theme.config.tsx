@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouter } from "nextra/hooks"
-import { useConfig } from 'nextra-theme-docs';
+import { Link, useConfig } from 'nextra-theme-docs';
 
 export default {
   docsRepositoryBase: "https://github.com/riffy-team/riffy-docs/tree/main",
@@ -10,9 +10,9 @@ export default {
   banner: {
     key: 'LL-v3-deprecation-banner',
     content: (
-      <a href="https://github.com/lavalink-devs/Lavalink/discussions/1100" target="_blank">
-        ⚠️ Friendly Reminder, Lavalink(By Lavalink Team) V3 Deprecates by 1st Nov-24', Be Ready! Read more →
-      </a>
+      <Link href="https://github.com/lavalink-devs/Lavalink/discussions/1100" target="_blank">
+        ⚠️ Lavalink V3 ends Nov 1, 2024. Prepare! Read more →
+      </Link>
     )
   },
   logo: (
