@@ -40,7 +40,6 @@ const nodes = [
 ];
 
 client.riffy = new Riffy(client, nodes, {
-    //              ^?
     send: (payload) => {
         const guild = client.guilds.cache.get(payload.d.guild_id);
         if (guild) guild.shard.send(payload);
