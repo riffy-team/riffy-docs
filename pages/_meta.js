@@ -1,4 +1,4 @@
-{
+export default {
   "index": "Introduction",
   "basics": "Basics",
   "implementations": "Implementations",
