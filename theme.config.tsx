@@ -9,7 +9,7 @@ export default {
   },
   banner: {
     key: 'LL-v3-deprecation-banner',
-    text: (
+    content: (
       <Link href="https://github.com/lavalink-devs/Lavalink/discussions/1100" target="_blank">
         ⚠️ Lavalink V3 ends Nov 1, 2024. Prepare! Read more →
       </Link>
