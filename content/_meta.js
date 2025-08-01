@@ -7,21 +7,19 @@ export default {
     "title": "Discord",
     "type": "page",
     "href": "https://discord.gg/TvjrWtEuyP",
-    "newWindow": true
   },
   "space": {
     "title": " ",
-    "type": "page"
+    "type": "separator",
   },
   "Github": {
     "title": "Github",
     "type": "page",
     "href": "https://github.com/riffy-team/riffy",
-    "newWindow": true
   },
   "space2": {
     "title": " ",
-    "type": "page"
+    "type": "separator",
   },
   "example": "Example"
 }
