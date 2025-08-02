@@ -29,7 +29,9 @@ export const metadata = {
     // Define your metadata here
     // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
     metadataBase: new URL("https://riffy.js.org"),
+    applicationName: "Riffy",
     title: {
+        default: "Riffy",
         template: "%s | Riffy",
     },
     description: "Riffy is a pro lavalink client. Designed to be simple and easy to use, with a focus on stability and more features.",
@@ -40,6 +42,17 @@ export const metadata = {
     generator: "Next.js",
     twitter: {
         site: "https://riffy.js.org",
+    },
+    openGraph: {
+        // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
+        url: "./",
+        siteName: "Riffy",
+        locale: "en_US",
+        type: "website",
+    },
+    alternates: {
+        // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
+        canonical: "./"
     }
 };
 

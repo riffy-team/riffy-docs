@@ -2,3 +2,4 @@
 node_modules
 .gitpod.yml
 pnpm-lock.yaml
+_pagefind/
