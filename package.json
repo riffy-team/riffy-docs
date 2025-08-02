@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Documentation for Riffy",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
