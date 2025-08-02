@@ -3,14 +3,15 @@ export default {
   "basics": "Basics",
   "implementations": "Implementations",
   "resources": "Resources",
+  "example": "Example",
+  "###": {
+    "title": "",
+    "type": "separator",
+  },
   "contact": {
     "title": "Discord",
     "type": "page",
     "href": "https://discord.gg/TvjrWtEuyP",
-  },
-  "space": {
-    "title": " ",
-    "type": "separator",
   },
   "Github": {
     "title": "Github",
@@ -18,8 +19,7 @@ export default {
     "href": "https://github.com/riffy-team/riffy",
   },
   "space2": {
-    "title": " ",
+    "title": "",
     "type": "separator",
   },
-  "example": "Example"
 }
