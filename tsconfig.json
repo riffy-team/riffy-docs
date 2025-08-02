@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es2022",
     "lib": [
       "dom",
@@ -8,7 +9,8 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
@@ -22,7 +24,16 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "paths": {
+    "@components/*": ["components/*"],
+    // These works at runtime due to Next.js internal resolution or custom config,
+    // but we include them here, so TypeScript doesn't complain.
+    "private-next-root-dir/*": ["./*"],
+    "next-mdx-import-source-file": ["./mdx-components.tsx"]
   },
   "include": [
     "**/*.ts",
@@ -31,6 +42,7 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next"
   ]
 }

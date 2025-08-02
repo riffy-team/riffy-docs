@@ -20,6 +20,7 @@ import {Banner, Head} from "nextra/components";
 import {getPageMap} from "nextra/page-map";
 import "nextra-theme-docs/style.css";
 import Link from "next/link";
+import type {FC, ReactNode} from "react";
 
 /**
  * @type {Metadata}
@@ -61,7 +62,7 @@ const navbar = (
 );
 const footer = <Footer>MIT {new Date().getFullYear()} © <a href="" target="_blank">Riffy.</a></Footer>;
 
-export default async function RootLayout({children}) {
+const RootLayout: FC<{ children: ReactNode }> = async ({children}) => {
     return (
         <html
             // Not required, but good for SEO
@@ -95,3 +96,5 @@ export default async function RootLayout({children}) {
         </html>
     );
 }
+
+export default RootLayout;
