@@ -77,7 +77,7 @@ const navbar = (
 const footer = <Footer>MIT {new Date().getFullYear()} © <a href="" target="_blank">Riffy.</a></Footer>;
 
 const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {
-    const pageMap = [...(await getPageMap()), { name: 'plugins', title: 'Plugins', type: 'menu', children: graphqlEslintPageMap }]
+    const pageMap = [...(await getPageMap()), { name: 'plugins', title: 'Plugins', type: 'menu', children: graphqlEslintPageMap, route: "/plugins" }]
     console.dir(pageMap, { depth: 5 })
     return (
         <html
