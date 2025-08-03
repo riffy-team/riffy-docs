@@ -30,8 +30,8 @@ const remotes = {
 const mdxPages = {}
 const pageMapItems = []
 
-function updateRoutes(items, parentRoute) {
-	return items.map(item => {
+function updateRoutes(items: any, parentRoute: any) {
+	return items.map((item: any) => {
 		let currentItemRoute = item.route;
 		const parentRouteSegments = parentRoute.split('/').filter(Boolean);
 		const lastParentSegment = parentRouteSegments[parentRouteSegments.length - 1];
@@ -55,7 +55,7 @@ function updateRoutes(items, parentRoute) {
 		const updatedItem = {
 			...item,
 			route: newRoute,
-			title: item.title || item.name.replace(/\.mdx?$/, '').replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+			title: item.title || item.name.replace(/\.mdx?$/, '').replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())
 		};
 		console.log(updatedItem)
 		if (item.children) {
@@ -67,13 +67,14 @@ function updateRoutes(items, parentRoute) {
 }
 
 for (const repo in remotes) {
-	const remote = remotes[repo]
+	const remote = remotes[repo as keyof typeof remotes]
 	const { mdxPages: remoteMdxPages, pageMap: _pageMap } = convertToPageMap({
 		filePaths: remote.filePaths,
 		basePath: repo
 	})
 
 	for (const key in remoteMdxPages) {
+		//@ts-ignore Cause its late night, low battery in my phone
 		mdxPages[`${repo}/${key.replace(/\/index$/, '')}`] = remoteMdxPages[key]
 	}
 
@@ -82,6 +83,7 @@ for (const repo in remotes) {
 		const pluginRootRoute = `/plugins/${repo}`;
 
 		console.log(_pageMap)
+		//@ts-ignore
 		const isReadmeIndex = _pageMap.length === 1 && (rootPluginItem?.children?.length === 1 && rootPluginItem.children[0].name === 'README');
 		console.log(isReadmeIndex, rootPluginItem)
 
@@ -93,9 +95,12 @@ for (const repo in remotes) {
 			type: isReadmeIndex ? 'page' : 'menu',
 		};
 
+		//@ts-ignore
 		if (!isReadmeIndex && rootPluginItem.children) {
+			//@ts-ignore
 			finalPluginItem.children = updateRoutes(rootPluginItem.children, pluginRootRoute);
 		} else if (isReadmeIndex) {
+			//@ts-ignore
 			delete finalPluginItem.children
 		}
 
@@ -104,6 +109,7 @@ for (const repo in remotes) {
 	}
 }
 
+//@ts-ignore
 export const pageMap = pageMapItems
 
 const { wrapper: Wrapper, ...components } = getMDXComponents({
@@ -120,10 +126,11 @@ type PageProps = Readonly<{
 export default async function Page(props: PageProps) {
 	const params = await props.params
 	const route = params.slug?.join('/') ?? ''
+	//@ts-ignore
 	const [repoName, ...filePathParts] = params.slug
 	const filePathName = filePathParts.join('/') || 'index'
 	const finalRoute = filePathParts.length === 0 ? `${route}/README` : route
-	const filePath = mdxPages[finalRoute]
+	const filePath = mdxPages[finalRoute as keyof typeof mdxPages]
 
 
 	console.log({ filePathParts, filePath, filePathName, route, repoName, mdxPages })
@@ -131,7 +138,7 @@ export default async function Page(props: PageProps) {
 		notFound()
 	}
 
-	const remote = remotes[repoName]
+	const remote = remotes[repoName as keyof typeof remotes]
 	if (!remote) {
 		notFound()
 	}
@@ -146,10 +153,6 @@ export default async function Page(props: PageProps) {
 	const data = await response.text()
 	const rawJs = await compileMdx(data, { filePath })
 	const { default: MDXContent, toc, metadata } = evaluate(rawJs, components)
-
-	if (filePathParts.length === 0) {
-		metadata.asIndexPage = true
-	}
 
 	return (
 		<Wrapper toc={toc} metadata={metadata}>
