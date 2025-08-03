@@ -15,12 +15,13 @@
 //   )
 // }
 
-import {Footer, Layout, Navbar} from "nextra-theme-docs";
-import {Banner, Head} from "nextra/components";
-import {getPageMap} from "nextra/page-map";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
+import { Banner, Head } from "nextra/components";
+import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
 import Link from "next/link";
-import type {FC, ReactNode} from "react";
+import { pageMap as graphqlEslintPageMap } from './plugins/[[...slug]]/page'
+import type { FC, ReactNode } from "react";
 
 /**
  * @type {Metadata}
@@ -58,24 +59,26 @@ export const metadata = {
 
 const banner = <Banner storageKey="LL-v3-deprecation-banner">
     <Link href="https://github.com/lavalink-devs/Lavalink/discussions/1100" target="_blank">
-    ⚠️ Lavalink V3 support ended - Nov 1, 2024. Prepare! Read more →
-</Link></Banner>;
+        ⚠️ Lavalink V3 support ended - Nov 1, 2024. Prepare! Read more →
+    </Link></Banner>;
 const navbar = (
     <Navbar
         logo={(
             <>
-                <img src="/logo.svg" alt="logo" width="20" height="20"/>
-                <span style={{marginLeft: '.4em', fontWeight: 800}}>
-        Riffy
-      </span>
+                <img src="/logo.svg" alt="logo" width="20" height="20" />
+                <span style={{ marginLeft: '.4em', fontWeight: 800 }}>
+                    Riffy
+                </span>
             </>
         )}
-        // ... Your additional navbar options
+    // ... Your additional navbar options
     />
 );
 const footer = <Footer>MIT {new Date().getFullYear()} © <a href="" target="_blank">Riffy.</a></Footer>;
 
-const RootLayout: FC<{ children: ReactNode }> = async ({children}) => {
+const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {
+    const pageMap = [...(await getPageMap()), { name: 'plugins', title: 'Plugins', type: 'menu', children: graphqlEslintPageMap }]
+    console.dir(pageMap, { depth: 5 })
     return (
         <html
             // Not required, but good for SEO
@@ -85,27 +88,27 @@ const RootLayout: FC<{ children: ReactNode }> = async ({children}) => {
             // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
             suppressHydrationWarning
         >
-        <Head
-            // ... Your additional head options
-            color={{
-                hue: 50
-            }}
-        >
-            {/* Your additional tags should be passed as `children` of `<Head>` element */}
-        </Head>
-        <body>
-        <Layout
-            banner={banner}
-            navbar={navbar}
-            pageMap={await getPageMap()}
-            docsRepositoryBase="https://github.com/riffy-team/riffy-docs/tree/main"
-            footer={footer}
-            sidebar={{ defaultMenuCollapseLevel: 2 }}
-            // ... Your additional layout options
-        >
-            {children}
-        </Layout>
-        </body>
+            <Head
+                // ... Your additional head options
+                color={{
+                    hue: 50
+                }}
+            >
+                {/* Your additional tags should be passed as `children` of `<Head>` element */}
+            </Head>
+            <body>
+                <Layout
+                    banner={banner}
+                    navbar={navbar}
+                    pageMap={pageMap}
+                    docsRepositoryBase="https://github.com/riffy-team/riffy-docs/tree/main"
+                    footer={footer}
+                    sidebar={{ defaultMenuCollapseLevel: 2 }}
+                // ... Your additional layout options
+                >
+                    {children}
+                </Layout>
+            </body>
         </html>
     );
 }
