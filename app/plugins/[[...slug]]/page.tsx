@@ -103,7 +103,6 @@ const getPluginData = unstable_cache(async () => {
 }, ['plugin-data'])
 
 const { mdxPages, pageMap: pageMapData } = await getPluginData()
-
 //@ts-ignore
 export const pageMap = pageMapData
 
@@ -113,12 +112,12 @@ const { wrapper: Wrapper, ...components } = getMDXComponents({
 })
 
 type PageProps = Readonly<{
-	params: Promise<{
+	params: {
 		slug?: string[]
-	}>
+	}
 }>
 
-const getPage = unstable_cache(async (slug: string[]) => {
+const getCompiledMdx = unstable_cache(async (slug: string[]) => {
     const route = slug?.join('/') ?? ''
     //@ts-ignore
     const [repoName, ...filePathParts] = slug
@@ -137,8 +136,7 @@ const getPage = unstable_cache(async (slug: string[]) => {
     const { user, repo, branch, docsPath } = remote
 
     const response = await fetch(
-        `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${docsPath ? docsPath + '/' : ''
-        }${filePath}`
+        `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${docsPath ? docsPath + '/' : ''}${filePath}`
     )
 
     if (!response.ok) {
@@ -146,20 +144,21 @@ const getPage = unstable_cache(async (slug: string[]) => {
     }
 
     const data = await response.text()
-    const rawJs = await compileMdx(data, { filePath })
-    return evaluate(rawJs, components)
-}, ['remote-mdx-pages'])
+    // compileMdx returns a string, which is serializable
+    return compileMdx(data, { filePath })
+}, ['compiled-remote-mdx-pages'])
 
-export default async function Page(props: PageProps) {
-	const params = await props.params
+
+export default async function Page({ params }: PageProps) {
     const slug = params.slug || []
-	const page = await getPage(slug)
+	const compiledMdx = await getCompiledMdx(slug)
 
-	if (!page) {
+	if (!compiledMdx) {
 		notFound()
 	}
 
-    const { default: MDXContent, toc, metadata } = page
+    // evaluate is now here, outside the cache
+    const { default: MDXContent, toc, metadata } = evaluate(compiledMdx, components)
 
 	return (
 		<Wrapper toc={toc} metadata={metadata}>
