@@ -26,80 +26,86 @@ const remotes = {
 	// Add more remotes here as 'repo-name': { ... }
 }
 
-const mdxPages = {}
-const pageMapItems = []
+const getPluginData = unstable_cache(async () => {
+    const mdxPages = {}
+    const pageMapItems = []
 
-function updateRoutes(items: any, parentRoute: any) {
-	return items.map((item: any) => {
-		let currentItemRoute = item.route;
-		const parentRouteSegments = parentRoute.split('/').filter(Boolean);
-		const lastParentSegment = parentRouteSegments[parentRouteSegments.length - 1];
+    function updateRoutes(items: any, parentRoute: any) {
+        return items.map((item: any) => {
+            let currentItemRoute = item.route;
+            const parentRouteSegments = parentRoute.split('/').filter(Boolean);
+            const lastParentSegment = parentRouteSegments[parentRouteSegments.length - 1];
 
-		if (lastParentSegment && currentItemRoute.startsWith(`/${lastParentSegment}`)) {
-			currentItemRoute = currentItemRoute.substring(lastParentSegment.length + 1);
-		}
+            if (lastParentSegment && currentItemRoute.startsWith(`/${lastParentSegment}`)) {
+                currentItemRoute = currentItemRoute.substring(lastParentSegment.length + 1);
+            }
 
-		if (currentItemRoute.startsWith('/')) {
-			currentItemRoute = currentItemRoute.substring(1);
-		}
-		const newRoute = `${parentRoute}/${currentItemRoute}`.replace(/\/\/+/g, '/');
+            if (currentItemRoute.startsWith('/')) {
+                currentItemRoute = currentItemRoute.substring(1);
+            }
+            const newRoute = `${parentRoute}/${currentItemRoute}`.replace(/\/\/+/g, '/');
 
-		const updatedItem = {
-			...item,
-			route: newRoute,
-			title: item.title || item.name.replace(/\.mdx?$/, '').replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())
-		};
+            const updatedItem = {
+                ...item,
+                route: newRoute,
+                title: item.title || item.name.replace(/\.mdx?$/, '').replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())
+            };
 
-		if (item.children) {
-			updatedItem.children = updateRoutes(item.children, newRoute);
-			updatedItem.type = 'menu';
-		}
-		return updatedItem;
-	});
-}
+            if (item.children) {
+                updatedItem.children = updateRoutes(item.children, newRoute);
+                updatedItem.type = 'menu';
+            }
+            return updatedItem;
+        });
+    }
 
-for (const repo in remotes) {
-	const remote = remotes[repo as keyof typeof remotes]
-	const { mdxPages: remoteMdxPages, pageMap: _pageMap } = convertToPageMap({
-		filePaths: remote.filePaths,
-		basePath: repo
-	})
+    for (const repo in remotes) {
+        const remote = remotes[repo as keyof typeof remotes]
+        const { mdxPages: remoteMdxPages, pageMap: _pageMap } = convertToPageMap({
+            filePaths: remote.filePaths,
+            basePath: repo
+        })
 
-	for (const key in remoteMdxPages) {
-		//@ts-ignore Cause its late night, low battery in my phone
-		mdxPages[`${repo}/${key.replace(/\/index$/, '')}`] = remoteMdxPages[key]
-	}
+        for (const key in remoteMdxPages) {
+            //@ts-ignore Cause its late night, low battery in my phone
+            mdxPages[`${repo}/${key.replace(/\/index$/, '')}`] = remoteMdxPages[key]
+        }
 
-	if (_pageMap.length > 0) {
-		const rootPluginItem = _pageMap[0];
-		const pluginRootRoute = `/plugins/${repo}`;
+        if (_pageMap.length > 0) {
+            const rootPluginItem = _pageMap[0];
+            const pluginRootRoute = `/plugins/${repo}`;
 
-		//@ts-ignore
-		const isReadmeIndex = _pageMap.length === 1 && (rootPluginItem?.children?.length === 1 && rootPluginItem.children[0].name === 'README');
+            //@ts-ignore
+            const isReadmeIndex = _pageMap.length === 1 && (rootPluginItem?.children?.length === 1 && rootPluginItem.children[0].name === 'README');
 
-		const finalPluginItem = {
-			...rootPluginItem,
-			name: repo,
-			route: pluginRootRoute,
-			title: repo.split('-').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' '),
-			type: isReadmeIndex ? 'page' : 'menu',
-		};
+            const finalPluginItem = {
+                ...rootPluginItem,
+                name: repo,
+                route: pluginRootRoute,
+                title: repo.split('-').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' '),
+                type: isReadmeIndex ? 'page' : 'menu',
+            };
 
-		//@ts-ignore
-		if (!isReadmeIndex && rootPluginItem.children) {
-			//@ts-ignore
-			finalPluginItem.children = updateRoutes(rootPluginItem.children, pluginRootRoute);
-		} else if (isReadmeIndex) {
-			//@ts-ignore
-			delete finalPluginItem.children
-		}
+            //@ts-ignore
+            if (!isReadmeIndex && rootPluginItem.children) {
+                //@ts-ignore
+                finalPluginItem.children = updateRoutes(rootPluginItem.children, pluginRootRoute);
+            } else if (isReadmeIndex) {
+                //@ts-ignore
+                delete finalPluginItem.children
+            }
 
-		pageMapItems.push(finalPluginItem);
-	}
-}
+            pageMapItems.push(finalPluginItem);
+        }
+    }
+
+    return { mdxPages, pageMap: pageMapItems }
+}, ['plugin-data'])
+
+const { mdxPages, pageMap: pageMapData } = await getPluginData()
 
 //@ts-ignore
-export const pageMap = pageMapItems
+export const pageMap = pageMapData
 
 const { wrapper: Wrapper, ...components } = getMDXComponents({
 	$Tabs: Tabs,
