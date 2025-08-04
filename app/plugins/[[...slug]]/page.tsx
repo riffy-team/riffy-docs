@@ -38,7 +38,8 @@ const getAllCompiledMdx = unstable_cache(async () => {
         })
 
         for (const route in mdxPages) {
-            const filePath = mdxPages[route]
+            const filePath = mdxPages[route as keyof typeof mdxPages]
+            if (!filePath) continue
             const { user, repo, branch, docsPath } = remote
 
             const response = await fetch(
