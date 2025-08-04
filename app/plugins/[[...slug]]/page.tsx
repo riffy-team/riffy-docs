@@ -26,6 +26,36 @@ const remotes = {
 	// Add more remotes here as 'repo-name': { ... }
 }
 
+// This function now fetches and compiles all MDX files at build time.
+const getAllCompiledMdx = unstable_cache(async () => {
+    const compiledMdxCache = new Map<string, string>()
+
+    for (const repoName in remotes) {
+        const remote = remotes[repoName as keyof typeof remotes]
+        const { mdxPages } = convertToPageMap({
+            filePaths: remote.filePaths,
+            basePath: repoName
+        })
+
+        for (const route in mdxPages) {
+            const filePath = mdxPages[route]
+            const { user, repo, branch, docsPath } = remote
+
+            const response = await fetch(
+                `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${docsPath ? docsPath + '/' : ''}${filePath}`
+            )
+
+            if (response.ok) {
+                const data = await response.text()
+                const compiled = await compileMdx(data, { filePath })
+                compiledMdxCache.set(route, compiled)
+            }
+        }
+    }
+    return compiledMdxCache
+}, ['all-compiled-remote-mdx'])
+
+
 const getPluginData = unstable_cache(async () => {
     const mdxPages = {}
     const pageMapItems = []
@@ -67,7 +97,7 @@ const getPluginData = unstable_cache(async () => {
         })
 
         for (const key in remoteMdxPages) {
-            //@ts-ignore Cause its late night, low battery in my phone
+            //@ts-ignore
             mdxPages[`${repo}/${key.replace(/\/index$/, '')}`] = remoteMdxPages[key]
         }
 
@@ -103,7 +133,8 @@ const getPluginData = unstable_cache(async () => {
 }, ['plugin-data'])
 
 const { mdxPages, pageMap: pageMapData } = await getPluginData()
-//@ts-ignore
+const allCompiledMdx = await getAllCompiledMdx()
+
 export const pageMap = pageMapData
 
 const { wrapper: Wrapper, ...components } = getMDXComponents({
@@ -117,48 +148,18 @@ type PageProps = Readonly<{
 	}
 }>
 
-const getCompiledMdx = unstable_cache(async (slug: string[]) => {
-    const route = slug?.join('/') ?? ''
-    //@ts-ignore
-    const [repoName, ...filePathParts] = slug
-    const finalRoute = filePathParts.length === 0 ? `${route}/README` : route
-    const filePath = mdxPages[finalRoute as keyof typeof mdxPages]
-
-    if (!filePath) {
-        return null
-    }
-
-    const remote = remotes[repoName as keyof typeof remotes]
-    if (!remote) {
-        return null
-    }
-
-    const { user, repo, branch, docsPath } = remote
-
-    const response = await fetch(
-        `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${docsPath ? docsPath + '/' : ''}${filePath}`
-    )
-
-    if (!response.ok) {
-        return null
-    }
-
-    const data = await response.text()
-    // compileMdx returns a string, which is serializable
-    return compileMdx(data, { filePath })
-}, ['compiled-remote-mdx-pages'])
-
-
 export default async function Page({ params }: PageProps) {
     const slug = params.slug || []
-	const compiledMdx = await getCompiledMdx(slug)
+    const route = slug.join('/')
+    const finalRoute = slug.length === 0 ? 'README' : route
+
+	const compiledMdx = allCompiledMdx.get(finalRoute)
 
 	if (!compiledMdx) {
 		notFound()
 	}
 
-    // evaluate is now here, outside the cache
-    const { default: MDXContent, toc, metadata } = evaluate(compiledMdx, components)
+    const { default: MDXContent, toc, metadata } = await evaluate(compiledMdx, components)
 
 	return (
 		<Wrapper toc={toc} metadata={metadata}>
