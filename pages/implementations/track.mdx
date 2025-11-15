@@ -4,22 +4,61 @@ import { Callout } from 'nextra/components'
 Represents a track 
 ## __Properties__
 
-### __Track__
-Track object
-___
-### __Info__
-Track info object
+### __rawData__
+Raw track data from the source node or provider.
+
+### __track__
+Encoded track string (`string`).
+
+### __info__
+Object containing all metadata about the track:
 
 #### __Properties__
-- identifier: `string`
-- seekable: `boolean`
-- author: `string`
-- length: `number`
-- stream: `boolean`
-- position: `number`
-- title: `string`
-- uri: `string`
-- requester: `string`
-- sourceName: `string`
-- thumbnail: `string`
+- `identifier: string`
+- `seekable: boolean` — Whether the track is seekable.
+- `author: string` — Track author or artist.
+- `length: number` — Duration in milliseconds.
+- `stream: boolean` — If the source is a stream/live.
+- `position: number` (may be present) — Current playback position.
+- `title: string` — Track title.
+- `uri: string` — Track URL.
+- `requester: any` — The requester object.
+- `sourceName: string` — Platform/source eg. 'youtube', 'soundcloud', etc.
+- `isrc: string | null` — ISRC code if available.
+- `_cachedThumbnail: string | null` — Used internally; caches any fetched thumbnail data for speed.
+- `thumbnail: string | null` — Computed property. Returns cached thumbnail, uses provider thumbnail/artwork when present, or attempts extraction using utility for v3/v4 as per node version.  Always prefer this for getting track artwork.
+  - Logic prioritizes:
+    1. Already cached value
+    2. Provider thumbnail (eg. YouTube artwork url)
+    3. For Lavalink v4: `artworkUrl` field
+    4. If all else fails, uses helper (`getImageUrl(this)`) to dynamically construct a suitable fallback.
+
+### __pluginInfo__
+Raw plugin info object, if provided by backend.
+
+---
+## __Methods__
+
+### __resolve(riffy)__
+Attempts to resolve (find/correct) the best matching official version for this track using current author/title.
+- **Parameters:**
+  - `riffy`: Riffy instance—used for resolver function (`riffy.resolve`).
+- **Returns:** `Promise<Track | undefined>`
+
+- Matching logic:
+  1. First, attempts to find an official audio track (matching author or author-topic and title) in search results.
+  2. If not found, prefers duration-matched candidates (±2s).
+  3. If still not found, prefers duration AND title match within tolerance.
+  4. As a last fallback, accepts the first result of `riffy.resolve` search results.
+
+```js copy
+const found = await track.resolve(riffy);
+if (found) {
+  // found.track and found.info.* are now updated to best match
+}
+```
+
+<Callout type="info">
+The computed `thumbnail` is the safest way to obtain the best/final artwork, as it works across all sources (YouTube/SoundCloud/Spotify/etc) and all supported Lavalink versions.
+</Callout>
 ___

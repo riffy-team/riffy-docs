@@ -25,6 +25,7 @@ Represents a player in a Guild.
 - `value`
 - `voiceChannel`
 - `volume`
+- `migrating`
 ___
 ## __Methods__
 ### __.play()__
@@ -110,4 +111,19 @@ ___
 > Destroy the player
 >
 > Returns: ```void```
+___
+### __.moveTo(newNode)__
+> **Player Migration:** Moves the player to a new node (audio server instance) without disconnecting from the guild voice channel. Useful for load balancing, redundancy, or upgrading servers.
+>
+> - Throws if `newNode` is not provided, not connected, or already the player’s current node.
+> - Safely migrates including current track, position, volume, pause state, filters, and voice data.
+> - Sets `.migrating` state and emits debug info/events.
+>
+> Returns: ```Promise<Player>```
+
+> __Migration Example__
+> ```js copy
+> await player.moveTo(newNode);
+> // The player will continue seamlessly on the new node.
+> ```
 ___

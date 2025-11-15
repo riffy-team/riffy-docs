@@ -1,0 +1,182 @@
+import { Callout, Cards } from 'nextra/components'
+import { ArrowRightIcon } from 'nextra/icons'
+
+# __Node__
+Represents an audio node (server instance) used for managing guild player connections, handling track operations, node migration, and more.
+
+## __Properties__
+- `riffy`
+- `name`
+- `host`
+- `port`
+- `password`
+- `restVersion`
+- `secure`
+- `sessionId`
+- `rest`
+- `wsUrl`
+- `restUrl`
+- `regions`
+- `info`
+- `stats`
+- `connected`
+- `resumeKey`
+- `resumeTimeout`
+- `autoResume`
+- `reconnectTimeout`
+- `reconnectTries`
+- `lastStats`
+
+---
+## __Lyrics Plugin Support__
+Node provides built-in lyrics plugin utilities accessible through its `.lyrics` property. Below are the available methods and their signatures:
+
+### __.lyrics.checkAvailable(eitherOne = true, ...plugins)__
+Checks if required lyrics plugins are present on the Lavalink node.
+- **Parameters:**
+  - `eitherOne` (`boolean`, default = `true`): If true, returns true if at least one plugin is present.
+  - `...plugins` (`string[]`): Plugin names to look for. Defaults to `["lavalyrics-plugin", "java-lyrics-plugin", "lyrics"]`.
+- **Returns:** `Promise<boolean>`
+- **Throws:** `RangeError` if plugins are missing.
+
+Example:
+```js copy
+const hasLyrics = await Node.lyrics.checkAvailable(true, "lavalyrics-plugin");
+```
+
+---
+
+### __.lyrics.get(trackOrEncodedTrackStr, skipTrackSource = false)__
+Fetches lyrics for a given track or encoded track string.
+- **Parameters:**
+  - `trackOrEncodedTrackStr` (`Track | string`): The track object or encoded track string.
+  - `skipTrackSource` (`boolean`, default = `false`): Whether to skip the track source and fetch from the highest priority source (as configured on the Lavalink server).
+- **Returns:** `Promise<Object | null>` — the lyrics data, null if plugin unavailable or no lyrics found.
+- **Throws:** `TypeError` if argument is not Track or string.
+
+Example:
+```js copy
+const lyrics = await Node.lyrics.get(track, false);
+```
+
+---
+
+### __.lyrics.getCurrentTrack(guildId, skipTrackSource = false, plugin)__
+Fetches lyrics for the currently playing track for a specific player.
+- **Parameters:**
+  - `guildId` (`string`): The Guild Id of the player.
+  - `skipTrackSource` (`boolean`, default = `false`): skip the actual track source & fetch from the highest priority source (Lavalink server configuration).
+  - `plugin` (`string`, optional): The plugin to use. Only required if there are multiple known plugins. Defaults to one available.
+- **Returns:** `Promise<Object | null>` — lyrics data or null if not found.
+
+Example:
+```js copy
+const lyrics = await Node.lyrics.getCurrentTrack("123456789012345678", false);
+```
+
+- __Plugin Examples:__ `"lavalyrics-plugin"`, `"java-lyrics-plugin"`, `"lyrics"`
+
+---
+
+<Callout type="info">
+  These methods require the Lavalink node to have the appropriate lyrics plugin installed. Missing plugins will result in a thrown error by `checkAvailable` or `null` results in lyrics fetching.
+</Callout>
+
+---
+## __Methods__
+
+### __.connect()__
+Initiates connection to the Lavalink node (audio server). Handles WebSocket URLs, authorization, and version checks.
+Returns: `Promise<void>`
+
+---
+### __.error(event)__
+Handles error events, emits debug/error and optionally initiates player migration.
+
+---
+### __.message(msg)__
+Handles incoming messages from the node. Dispatches payloads to the relevant players.
+
+---
+### __.close(event, reason)__
+Handles node closure and emits disconnect and debug events. Optionally, can trigger automatic player migration.
+Returns: `Promise<void>`
+
+---
+### __.reconnect()__
+Attempts to reconnect to the node after a disconnection or error.
+
+---
+### __.destroy(clean=false)__
+Destroys the node connection. If `clean` is true, removes all listeners and only cleans up this node; if false, disconnects all associated players before destruction.
+
+---
+### __.disconnect()__
+Disconnects but does not fully destroy; optionally tries to move associated players to a different (best) node.
+
+---
+### __.penalties (getter)__
+Calculates penalty score based on active players, CPU/system load, frame stats, etc. Used for intelligent load balancing.
+
+---
+### __.fetchInfo(options)__
+Fetches Lavalink Node's version and information. Throws if not supported.
+Returns: `Promise<NodeInfo>`
+
+---
+
+## __Node Migration__
+Nodes support migration to ensure seamless playback and high availability:
+
+- **Automatic Migration:**
+  - If a node experiences an error or disconnect (see `.error(event)` / `.close(event, reason)`), and configuration such as `riffy.options.migrateOnDisconnect` or `riffy.options.migrateOnFailure` is enabled, the node will attempt to auto-migrate all associated players to another available/best node.
+  - This process internally uses Player's `.moveTo(newNode)` method—see the [Player migration docs](./player) for method details.
+
+- **Relevant Events:**
+  - Emits `nodeDisconnect`, `nodeError`, and `nodeDestroy` during/after migration attempts.
+  - Emits `nodeMigrated` when players are successfully moved to a new node.
+    - **TypeScript type:**
+      ```ts
+      // nodeMigrated(newNode: Node, migratedPlayers: Player[]);
+      type nodeMigrated = (newNode: Node, migratedPlayers: Player[]) => void;
+      ```
+      - `newNode`: The Node instance that players have been migrated to.
+      - `migratedPlayers`: Array of Player instances that were migrated.
+  - Emits `nodeMigrationFailed` if player migration fails due to an error or lack of available nodes.
+    - **TypeScript type:**
+      ```ts
+      // nodeMigrationFailed(oldNode: Node, error: Error, affectedPlayers: Player[]);
+      type nodeMigrationFailed = (oldNode: Node, error: Error, affectedPlayers: Player[]) => void;
+      ```
+      - `oldNode`: The Node migration was attempted from.
+      - `error`: The Error instance representing the migration failure.
+      - `affectedPlayers`: Array of Player instances that failed to migrate.
+  - Players are rerouted to the new node or destroyed if migration fails and no spare nodes are available.
+
+- **Configuration:**
+  - `migrateOnDisconnect`: If true, triggers auto-migration on disconnect.
+  - `migrateOnFailure`: If true, triggers auto-migration on node errors.
+
+---
+
+**Migration Pseudocode Example:**
+```js copy
+// Inside node error/close handler
+if (riffy.options.migrateOnDisconnect) {
+  await riffy.migrate(failedNode);
+  // Players re-join on new node, playback resumes with minimal disruption
+}
+```
+
+---
+
+<Callout type="info">
+  Listen for `nodeMigrated` and `nodeMigrationFailed` for custom handling: notify users, implement custom retry logic, and maintain high availability.
+</Callout>
+
+---
+
+<Cards>
+  <Cards.Card icon={<ArrowRightIcon />} title="Player Migration" href="/implementations/player" />
+  <Cards.Card icon={<ArrowRightIcon />} title="Lyrics" href="#lyrics-plugin-support" />
+</Cards>
