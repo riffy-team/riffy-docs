@@ -9,9 +9,8 @@ export default {
     "href": "https://discord.gg/TvjrWtEuyP",
     "newWindow": true
   },
-  "space": {
-    "title": " ",
-    "type": "page"
+  "---": {
+    "type": "separator"
   },
   "Github": {
     "title": "Github",
@@ -19,9 +18,8 @@ export default {
     "href": "https://github.com/riffy-team/riffy",
     "newWindow": true
   },
-  "space2": {
-    "title": " ",
-    "type": "page"
+  "---": {
+    "type": "separator"
   },
   "example": "Example"
 }
