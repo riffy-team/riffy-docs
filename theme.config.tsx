@@ -8,11 +8,9 @@ export default {
     hue: 50,
   },
   banner: {
-    key: 'LL-v3-deprecation-banner',
+    key: 'New-Feat-Nov-25',
     content: (
-      <Link href="https://github.com/lavalink-devs/Lavalink/discussions/1100" target="_blank">
-        Lyrics, Node Migration Are Here 🌲❄️!
-      </Link>
+        <>Lyrics, Node Migration Are Here 🌲❄️!</>
     )
   },
   logo: (
